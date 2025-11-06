@@ -1046,13 +1046,17 @@
             
             // Calculate retirement scenarios
             calculateScenario(55, age, expectancy, inflationRate, returnRate, superBalance, contribution, 
-                            expenses, retirementExpenseRate, healthcare, partnerData, downsizingData, ttrData);
+                            expenses, retirementExpenseRate, healthcare, partnerData, downsizingData, ttrData,
+                            investmentPropsValue, residenceValue, otherAssetsValue);
             calculateScenario(60, age, expectancy, inflationRate, returnRate, superBalance, contribution, 
-                            expenses, retirementExpenseRate, healthcare, partnerData, downsizingData, ttrData);
+                            expenses, retirementExpenseRate, healthcare, partnerData, downsizingData, ttrData,
+                            investmentPropsValue, residenceValue, otherAssetsValue);
             calculateScenario(65, age, expectancy, inflationRate, returnRate, superBalance, contribution, 
-                            expenses, retirementExpenseRate, healthcare, partnerData, downsizingData, ttrData);
+                            expenses, retirementExpenseRate, healthcare, partnerData, downsizingData, ttrData,
+                            investmentPropsValue, residenceValue, otherAssetsValue);
             calculateScenario(70, age, expectancy, inflationRate, returnRate, superBalance, contribution, 
-                            expenses, retirementExpenseRate, healthcare, partnerData, downsizingData, ttrData);
+                            expenses, retirementExpenseRate, healthcare, partnerData, downsizingData, ttrData,
+                            investmentPropsValue, residenceValue, otherAssetsValue);
             
             // Generate strategy analyses
             generateTTRAnalysis(age, ttrData, superBalance, income);
@@ -1075,7 +1079,7 @@
         
         function calculateScenario(scenarioAge, currentAge, lifeExpectancy, inflationRate, returnRate, 
                                  superBalance, contribution, expenses, retirementExpenseRate, healthcare, 
-                                 partnerData, downsizingData, ttrData) {
+                                 partnerData, downsizingData, ttrData, investmentPropsValue, residenceValue, otherAssetsValue) {
             const yearsToRetirement = scenarioAge - currentAge;
             const retirementYears = lifeExpectancy - scenarioAge;
             
@@ -1144,7 +1148,7 @@
             
             // Estimate Age Pension based on assets (simplified)
             let agePension = 0;
-            const totalAssets = projectedSuper + (investmentPropsValue || 0) + (otherAssets || 0);
+            const totalAssets = projectedSuper + (investmentPropsValue || 0) + (otherAssetsValue || 0);
             if (totalAssets < 280000) { // Below asset test threshold for couple
                 agePension = partnerData ? 40000 : 27000; // Approximate full Age Pension
             } else if (totalAssets < 875000) { // Partial Age Pension range
@@ -1166,26 +1170,31 @@
             if (superElement) superElement.textContent = formatCurrency(projectedSuper);
             if (incomeElement) incomeElement.textContent = formatCurrency(totalRetirementIncome);
             
+            // FIXED: Check if elements exist before trying to manipulate them
             if (shortfall > 0) {
                 const shortfallElement = document.getElementById(`scenario-${scenarioAge}-shortfall`);
+                const surplusElement = document.getElementById(`scenario-${scenarioAge}-surplus`);
+                
                 if (shortfallElement) {
                     shortfallElement.textContent = formatCurrency(shortfall);
                     shortfallElement.style.display = 'block';
                 }
                 
-                // Hide surplus element if it exists
-                const surplusElement = document.getElementById(`scenario-${scenarioAge}-surplus`);
-                if (surplusElement) surplusElement.style.display = 'none';
+                if (surplusElement) {
+                    surplusElement.style.display = 'none';
+                }
             } else {
+                const shortfallElement = document.getElementById(`scenario-${scenarioAge}-shortfall`);
                 const surplusElement = document.getElementById(`scenario-${scenarioAge}-surplus`);
+                
                 if (surplusElement) {
                     surplusElement.textContent = formatCurrency(surplus);
                     surplusElement.style.display = 'block';
                 }
                 
-                // Hide shortfall element if it exists
-                const shortfallElement = document.getElementById(`scenario-${scenarioAge}-shortfall`);
-                if (shortfallElement) shortfallElement.style.display = 'none';
+                if (shortfallElement) {
+                    shortfallElement.style.display = 'none';
+                }
             }
             
             return {
@@ -1217,7 +1226,7 @@
             
             const ttrStartAge = ttrData.startAge;
             const yearsToTTR = ttrStartAge - currentAge;
-            const ttrIncome = income * ttrData.incomePercent;
+            const ttrIncomeAmount = income * ttrData.incomePercent;
             const salarySacrificeAmount = income * ttrData.salarySacrificePercent;
             
             ttrAnalysis.innerHTML = `
@@ -1234,7 +1243,7 @@
                         </div>
                         <div class="scenario-card">
                             <div class="result-label">TTR Income</div>
-                            <div class="scenario-value">${formatCurrency(ttrIncome)}</div>
+                            <div class="scenario-value">${formatCurrency(ttrIncomeAmount)}</div>
                         </div>
                         <div class="scenario-card">
                             <div class="result-label">Additional Salary Sacrifice</div>
