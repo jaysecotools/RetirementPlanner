@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Retirement Financial Planner</title>
+    <title>Australian Retirement Financial Planner</title>
     <style>
         :root {
             --primary: #2c3e50;
@@ -13,6 +13,8 @@
             --dark: #34495e;
             --success: #2ecc71;
             --warning: #f39c12;
+            --australia-green: #00843D;
+            --australia-gold: #FFCD00;
         }
         
         * {
@@ -35,23 +37,38 @@
         }
         
         header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--australia-green), var(--australia-gold));
             color: white;
             padding: 30px 0;
             text-align: center;
             border-radius: 10px;
             margin-bottom: 30px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
         }
         
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
+            position: relative;
         }
         
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.9;
+            position: relative;
         }
         
         .app-container {
@@ -166,6 +183,14 @@
             background: #e67e22;
         }
         
+        .btn-australia {
+            background: var(--australia-green);
+        }
+        
+        .btn-australia:hover {
+            background: #006b32;
+        }
+        
         .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -223,6 +248,7 @@
             display: flex;
             gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
         
         .tabs {
@@ -326,13 +352,99 @@
             padding-top: 15px;
             border-top: 2px solid var(--dark);
         }
+        
+        .scenario-comparison {
+            margin-top: 30px;
+        }
+        
+        .scenario-tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .scenario-tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .scenario-tab.active {
+            border-bottom-color: var(--australia-green);
+            color: var(--australia-green);
+            font-weight: 600;
+        }
+        
+        .scenario-content {
+            display: none;
+        }
+        
+        .scenario-content.active {
+            display: block;
+        }
+        
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .scenario-age {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--australia-green);
+            margin-bottom: 5px;
+        }
+        
+        .scenario-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .australia-flag {
+            display: inline-block;
+            width: 20px;
+            height: 15px;
+            background: linear-gradient(to bottom, #00843D 0%, #00843D 50%, #FFCD00 50%, #FFCD00 100%);
+            position: relative;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .australia-flag::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 15"><path d="M2,2 L5,5 L2,8 L5,5 L8,8 L5,5 L8,2 L5,5 L2,2 Z M12,2 L15,5 L12,8 L15,5 L18,8 L15,5 L18,2 L15,5 L12,2 Z" fill="white"/><circle cx="10" cy="7.5" r="2" fill="white"/></svg>');
+            background-size: cover;
+        }
+        
+        .super-info {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--australia-green);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Enhanced Retirement Financial Planner</h1>
-            <p class="subtitle">Comprehensive retirement planning with partner, dependents, and asset tracking</p>
+            <h1><span class="australia-flag"></span>Australian Retirement Financial Planner</h1>
+            <p class="subtitle">Plan your Australian retirement with Super, Age Pension, and multi-scenario projections</p>
         </header>
         
         <div class="app-container">
@@ -342,15 +454,14 @@
                 <div class="tabs">
                     <div class="tab active" data-tab="basic">Basic Info</div>
                     <div class="tab" data-tab="partner">Partner</div>
-                    <div class="tab" data-tab="dependents">Dependents</div>
-                    <div class="tab" data-tab="assets">Assets & Liabilities</div>
+                    <div class="tab" data-tab="super">Super & Assets</div>
                     <div class="tab" data-tab="income">Income & Expenses</div>
                 </div>
                 
                 <div class="tab-content active" id="basic-tab">
                     <div class="form-group">
                         <label for="current-age">Your Current Age</label>
-                        <input type="number" id="current-age" min="18" max="100" value="40">
+                        <input type="number" id="current-age" min="18" max="100" value="45">
                     </div>
                     
                     <div class="form-group">
@@ -360,7 +471,11 @@
                     
                     <div class="form-group">
                         <label for="life-expectancy">Life Expectancy</label>
-                        <input type="number" id="life-expectancy" min="65" max="120" value="90">
+                        <select id="life-expectancy">
+                            <option value="85">Average (85 years)</option>
+                            <option value="90" selected>Above Average (90 years)</option>
+                            <option value="95">Longevity (95 years)</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
@@ -383,7 +498,7 @@
                     <div id="partner-details" class="hidden">
                         <div class="form-group">
                             <label for="partner-age">Partner's Age</label>
-                            <input type="number" id="partner-age" min="18" max="100" value="38">
+                            <input type="number" id="partner-age" min="18" max="100" value="42">
                         </div>
                         
                         <div class="form-group">
@@ -391,114 +506,100 @@
                             <input type="number" id="partner-retirement-age" min="40" max="100" value="65">
                         </div>
                         
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="partner-keep-working" checked>
+                            <label for="partner-keep-working">Partner continues working after I retire</label>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="partner-income">Partner's Annual Income</label>
-                            <input type="number" id="partner-income" min="0" value="60000">
+                            <input type="number" id="partner-income" min="0" value="70000">
                         </div>
                         
                         <div class="form-group">
-                            <label for="partner-savings">Partner's Retirement Savings</label>
-                            <input type="number" id="partner-savings" min="0" value="80000">
+                            <label for="partner-super">Partner's Super Balance</label>
+                            <input type="number" id="partner-super" min="0" value="90000">
                         </div>
                         
                         <div class="form-group">
-                            <label for="partner-contribution">Partner's Annual Retirement Contribution</label>
-                            <input type="number" id="partner-contribution" min="0" value="8000">
+                            <label for="partner-contribution">Partner's Annual Super Contribution</label>
+                            <input type="number" id="partner-contribution" min="0" value="8500">
                         </div>
                     </div>
                 </div>
                 
-                <div class="tab-content" id="dependents-tab">
-                    <div class="form-group">
-                        <label for="dependent-count">Number of Dependents</label>
-                        <input type="number" id="dependent-count" min="0" max="10" value="0">
-                    </div>
-                    
-                    <div id="dependents-container" class="dependents-list">
-                        <!-- Dynamic dependent fields will be added here -->
-                    </div>
-                </div>
-                
-                <div class="tab-content" id="assets-tab">
-                    <div class="form-group">
-                        <label for="current-savings">Your Retirement Savings</label>
-                        <input type="number" id="current-savings" min="0" value="100000">
+                <div class="tab-content" id="super-tab">
+                    <div class="super-info">
+                        <h4>Australian Superannuation</h4>
+                        <p>Your employer contributes 11% of your earnings to super. Additional contributions may be tax-deductible.</p>
                     </div>
                     
                     <div class="form-group">
-                        <label for="annual-contribution">Your Annual Retirement Contribution</label>
-                        <input type="number" id="annual-contribution" min="0" value="10000">
+                        <label for="current-super">Your Current Super Balance</label>
+                        <input type="number" id="current-super" min="0" value="250000">
                     </div>
                     
-                    <h3>Real Estate Assets</h3>
-                    <div id="real-estate-assets">
-                        <div class="asset-item">
-                            <div class="asset-header">
-                                <h4>Primary Residence</h4>
-                            </div>
-                            <div class="form-group">
-                                <label for="primary-residence-value">Estimated Value</label>
-                                <input type="number" id="primary-residence-value" min="0" value="350000">
-                            </div>
-                            <div class="form-group">
-                                <label for="primary-residence-mortgage">Remaining Mortgage</label>
-                                <input type="number" id="primary-residence-mortgage" min="0" value="200000">
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="annual-contribution">Your Annual Super Contribution (incl. employer)</label>
+                        <input type="number" id="annual-contribution" min="0" value="15000">
                     </div>
                     
-                    <button id="add-property" class="btn">Add Another Property</button>
+                    <div class="form-group">
+                        <label for="salary-sacrifice">Additional Salary Sacrifice (Annual)</label>
+                        <input type="number" id="salary-sacrifice" min="0" value="5000">
+                    </div>
                     
                     <h3>Other Assets</h3>
+                    
                     <div class="form-group">
                         <label for="investment-properties">Investment Properties Value</label>
                         <input type="number" id="investment-properties" min="0" value="0">
                     </div>
                     
                     <div class="form-group">
-                        <label for="vehicle-value">Vehicles Value</label>
-                        <input type="number" id="vehicle-value" min="0" value="30000">
+                        <label for="primary-residence-value">Primary Residence Value</label>
+                        <input type="number" id="primary-residence-value" min="0" value="750000">
                     </div>
                     
                     <div class="form-group">
-                        <label for="other-assets">Other Assets Value</label>
-                        <input type="number" id="other-assets" min="0" value="25000">
+                        <label for="other-assets">Other Assets Value (Shares, Savings, etc.)</label>
+                        <input type="number" id="other-assets" min="0" value="50000">
                     </div>
                 </div>
                 
                 <div class="tab-content" id="income-tab">
                     <div class="form-group">
                         <label for="current-income">Your Current Annual Income</label>
-                        <input type="number" id="current-income" min="0" value="75000">
+                        <input type="number" id="current-income" min="0" value="95000">
                     </div>
                     
                     <div class="form-group">
-                        <label for="social-security">Expected Social Security (Annual)</label>
-                        <input type="number" id="social-security" min="0" value="20000">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="pension">Expected Pension (Annual)</label>
-                        <input type="number" id="pension" min="0" value="0">
+                        <label for="age-pension">Expected Age Pension (Annual)</label>
+                        <select id="age-pension">
+                            <option value="0">No Age Pension</option>
+                            <option value="12000" selected>Partial Age Pension</option>
+                            <option value="24000">Full Age Pension</option>
+                        </select>
+                        <small>The maximum full Age Pension for a couple is currently around $40,000 per year.</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="current-expenses">Current Annual Expenses</label>
-                        <input type="number" id="current-expenses" min="0" value="50000">
+                        <input type="number" id="current-expenses" min="0" value="65000">
                     </div>
                     
                     <div class="form-group">
                         <label for="retirement-expenses">Expected Retirement Expenses (% of Current)</label>
-                        <input type="number" id="retirement-expenses" min="50" max="150" value="80">
+                        <input type="number" id="retirement-expenses" min="50" max="150" value="75">
                     </div>
                     
                     <div class="form-group">
                         <label for="healthcare-costs">Expected Annual Healthcare Costs in Retirement</label>
-                        <input type="number" id="healthcare-costs" min="0" value="5000">
+                        <input type="number" id="healthcare-costs" min="0" value="7000">
                     </div>
                 </div>
                 
-                <button id="calculate-btn" class="btn btn-block">Calculate Retirement Plan</button>
+                <button id="calculate-btn" class="btn btn-block btn-australia">Calculate Retirement Plan</button>
                 <button id="save-btn" class="btn btn-success btn-block">Save Data Locally</button>
                 <button id="load-btn" class="btn btn-warning btn-block">Load Saved Data</button>
             </div>
@@ -511,41 +612,117 @@
                 </div>
                 
                 <div id="results-content" class="hidden">
-                    <div class="net-worth-summary">
-                        <h3>Current Net Worth Summary</h3>
-                        <div class="net-worth-item">
-                            <span>Assets:</span>
-                            <span id="net-worth-assets">$0</span>
-                        </div>
-                        <div class="net-worth-item">
-                            <span>Liabilities:</span>
-                            <span id="net-worth-liabilities">$0</span>
-                        </div>
-                        <div class="net-worth-item net-worth-total">
-                            <span>Net Worth:</span>
-                            <span id="net-worth-total">$0</span>
-                        </div>
-                    </div>
-                    
-                    <div class="results-grid">
-                        <div class="result-card">
-                            <div class="result-label">Retirement Age</div>
-                            <div class="result-value" id="result-retirement-age">65</div>
+                    <div class="scenario-comparison">
+                        <h3>Retirement Scenarios</h3>
+                        <div class="scenario-tabs">
+                            <div class="scenario-tab active" data-scenario="55">Age 55</div>
+                            <div class="scenario-tab" data-scenario="60">Age 60</div>
+                            <div class="scenario-tab" data-scenario="65">Age 65</div>
+                            <div class="scenario-tab" data-scenario="70">Age 70</div>
                         </div>
                         
-                        <div class="result-card">
-                            <div class="result-label">Years in Retirement</div>
-                            <div class="result-value" id="result-retirement-years">25</div>
+                        <div class="scenario-content active" id="scenario-55">
+                            <div class="scenario-grid">
+                                <div class="scenario-card">
+                                    <div class="scenario-age">Age 55</div>
+                                    <div class="result-label">Years to Retirement</div>
+                                    <div class="scenario-value" id="scenario-55-years">10</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Projected Super</div>
+                                    <div class="scenario-value" id="scenario-55-super">$480,000</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Annual Retirement Income</div>
+                                    <div class="scenario-value" id="scenario-55-income">$42,000</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Retirement Shortfall</div>
+                                    <div class="scenario-value" id="scenario-55-shortfall">$18,000</div>
+                                </div>
+                            </div>
+                            <div class="recommendation warning">
+                                <h4>Age 55 Retirement Considerations</h4>
+                                <p>Retiring at 55 would require accessing your super through a transition to retirement pension. You may face a significant income shortfall without additional savings or part-time work.</p>
+                            </div>
                         </div>
                         
-                        <div class="result-card">
-                            <div class="result-label">Retirement Savings Goal</div>
-                            <div class="result-value" id="result-savings-goal">$1,250,000</div>
+                        <div class="scenario-content" id="scenario-60">
+                            <div class="scenario-grid">
+                                <div class="scenario-card">
+                                    <div class="scenario-age">Age 60</div>
+                                    <div class="result-label">Years to Retirement</div>
+                                    <div class="scenario-value" id="scenario-60-years">15</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Projected Super</div>
+                                    <div class="scenario-value" id="scenario-60-super">$680,000</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Annual Retirement Income</div>
+                                    <div class="scenario-value" id="scenario-60-income">$54,000</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Retirement Shortfall</div>
+                                    <div class="scenario-value" id="scenario-60-shortfall">$6,000</div>
+                                </div>
+                            </div>
+                            <div class="recommendation">
+                                <h4>Age 60 Retirement Considerations</h4>
+                                <p>At age 60, you can access your super tax-free. Your projected income is closer to your needs, but you may still need to supplement with part-time work or reduce expenses.</p>
+                            </div>
                         </div>
                         
-                        <div class="result-card">
-                            <div class="result-label">Projected Savings at Retirement</div>
-                            <div class="result-value" id="result-projected-savings">$985,000</div>
+                        <div class="scenario-content" id="scenario-65">
+                            <div class="scenario-grid">
+                                <div class="scenario-card">
+                                    <div class="scenario-age">Age 65</div>
+                                    <div class="result-label">Years to Retirement</div>
+                                    <div class="scenario-value" id="scenario-65-years">20</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Projected Super</div>
+                                    <div class="scenario-value" id="scenario-65-super">$950,000</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Annual Retirement Income</div>
+                                    <div class="scenario-value" id="scenario-65-income">$68,000</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Retirement Surplus</div>
+                                    <div class="scenario-value" id="scenario-65-surplus">$8,000</div>
+                                </div>
+                            </div>
+                            <div class="recommendation success">
+                                <h4>Age 65 Retirement Considerations</h4>
+                                <p>At age 65, you reach Age Pension eligibility and your super has more time to grow. This scenario shows a comfortable retirement with potential for surplus income.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="scenario-content" id="scenario-70">
+                            <div class="scenario-grid">
+                                <div class="scenario-card">
+                                    <div class="scenario-age">Age 70</div>
+                                    <div class="result-label">Years to Retirement</div>
+                                    <div class="scenario-value" id="scenario-70-years">25</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Projected Super</div>
+                                    <div class="scenario-value" id="scenario-70-super">$1,250,000</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Annual Retirement Income</div>
+                                    <div class="scenario-value" id="scenario-70-income">$82,000</div>
+                                </div>
+                                <div class="scenario-card">
+                                    <div class="result-label">Retirement Surplus</div>
+                                    <div class="scenario-value" id="scenario-70-surplus">$22,000</div>
+                                </div>
+                            </div>
+                            <div class="recommendation success">
+                                <h4>Age 70 Retirement Considerations</h4>
+                                <p>Working until 70 maximizes your super balance and minimizes retirement years. This provides the highest retirement income but means fewer years to enjoy retirement.</p>
+                            </div>
                         </div>
                     </div>
                     
@@ -561,7 +738,7 @@
                     </div>
                     
                     <div class="action-buttons">
-                        <button id="export-pdf" class="btn">Export as PDF</button>
+                        <button id="export-pdf" class="btn btn-australia">Export as PDF</button>
                         <button id="print-plan" class="btn">Print Plan</button>
                     </div>
                 </div>
@@ -571,6 +748,7 @@
         <div class="footer">
             <p>This retirement planner is for informational purposes only. Consult with a qualified financial advisor for personalized advice.</p>
             <p>All data is stored locally on your device and is not transmitted to any server.</p>
+            <p>Australian Superannuation and Age Pension rules are subject to change. Verify current regulations with the ATO and Services Australia.</p>
         </div>
     </div>
 
@@ -588,10 +766,9 @@
         const resultsContent = document.getElementById('results-content');
         const hasPartnerCheckbox = document.getElementById('has-partner');
         const partnerDetails = document.getElementById('partner-details');
-        const dependentCount = document.getElementById('dependent-count');
-        const dependentsContainer = document.getElementById('dependents-container');
-        const addPropertyBtn = document.getElementById('add-property');
-        const realEstateAssets = document.getElementById('real-estate-assets');
+        const partnerKeepWorking = document.getElementById('partner-keep-working');
+        const scenarioTabs = document.querySelectorAll('.scenario-tab');
+        const scenarioContents = document.querySelectorAll('.scenario-content');
         
         // Input fields
         const currentAge = document.getElementById('current-age');
@@ -599,11 +776,11 @@
         const lifeExpectancy = document.getElementById('life-expectancy');
         const inflation = document.getElementById('inflation');
         const investmentReturn = document.getElementById('investment-return');
-        const currentSavings = document.getElementById('current-savings');
+        const currentSuper = document.getElementById('current-super');
         const annualContribution = document.getElementById('annual-contribution');
+        const salarySacrifice = document.getElementById('salary-sacrifice');
         const currentIncome = document.getElementById('current-income');
-        const socialSecurity = document.getElementById('social-security');
-        const pension = document.getElementById('pension');
+        const agePension = document.getElementById('age-pension');
         const currentExpenses = document.getElementById('current-expenses');
         const retirementExpenses = document.getElementById('retirement-expenses');
         const healthcareCosts = document.getElementById('healthcare-costs');
@@ -612,25 +789,36 @@
         const partnerAge = document.getElementById('partner-age');
         const partnerRetirementAge = document.getElementById('partner-retirement-age');
         const partnerIncome = document.getElementById('partner-income');
-        const partnerSavings = document.getElementById('partner-savings');
+        const partnerSuper = document.getElementById('partner-super');
         const partnerContribution = document.getElementById('partner-contribution');
         
         // Asset fields
-        const primaryResidenceValue = document.getElementById('primary-residence-value');
-        const primaryResidenceMortgage = document.getElementById('primary-residence-mortgage');
         const investmentProperties = document.getElementById('investment-properties');
-        const vehicleValue = document.getElementById('vehicle-value');
+        const primaryResidenceValue = document.getElementById('primary-residence-value');
         const otherAssets = document.getElementById('other-assets');
         
-        // Result fields
-        const resultRetirementAge = document.getElementById('result-retirement-age');
-        const resultRetirementYears = document.getElementById('result-retirement-years');
-        const resultSavingsGoal = document.getElementById('result-savings-goal');
-        const resultProjectedSavings = document.getElementById('result-projected-savings');
+        // Scenario result fields
+        const scenario55Years = document.getElementById('scenario-55-years');
+        const scenario55Super = document.getElementById('scenario-55-super');
+        const scenario55Income = document.getElementById('scenario-55-income');
+        const scenario55Shortfall = document.getElementById('scenario-55-shortfall');
+        
+        const scenario60Years = document.getElementById('scenario-60-years');
+        const scenario60Super = document.getElementById('scenario-60-super');
+        const scenario60Income = document.getElementById('scenario-60-income');
+        const scenario60Shortfall = document.getElementById('scenario-60-shortfall');
+        
+        const scenario65Years = document.getElementById('scenario-65-years');
+        const scenario65Super = document.getElementById('scenario-65-super');
+        const scenario65Income = document.getElementById('scenario-65-income');
+        const scenario65Surplus = document.getElementById('scenario-65-surplus');
+        
+        const scenario70Years = document.getElementById('scenario-70-years');
+        const scenario70Super = document.getElementById('scenario-70-super');
+        const scenario70Income = document.getElementById('scenario-70-income');
+        const scenario70Surplus = document.getElementById('scenario-70-surplus');
+        
         const recommendationsList = document.getElementById('recommendations-list');
-        const netWorthAssets = document.getElementById('net-worth-assets');
-        const netWorthLiabilities = document.getElementById('net-worth-liabilities');
-        const netWorthTotal = document.getElementById('net-worth-total');
         
         // Chart variable
         let retirementChart;
@@ -654,6 +842,25 @@
             });
         });
         
+        // Scenario tab functionality
+        scenarioTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const scenarioId = tab.getAttribute('data-scenario');
+                
+                // Update active scenario tab
+                scenarioTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show active scenario content
+                scenarioContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `scenario-${scenarioId}`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+        
         // Partner checkbox toggle
         hasPartnerCheckbox.addEventListener('change', function() {
             if (this.checked) {
@@ -661,57 +868,6 @@
             } else {
                 partnerDetails.classList.add('hidden');
             }
-        });
-        
-        // Dependents count change
-        dependentCount.addEventListener('change', updateDependents);
-        
-        function updateDependents() {
-            const count = parseInt(dependentCount.value);
-            dependentsContainer.innerHTML = '';
-            
-            for (let i = 0; i < count; i++) {
-                const dependentDiv = document.createElement('div');
-                dependentDiv.className = 'dependent-item';
-                dependentDiv.innerHTML = `
-                    <div>
-                        <label>Dependent ${i+1} Age</label>
-                        <input type="number" class="dependent-age" min="0" max="25" value="10">
-                    </div>
-                    <div>
-                        <label>Years Until Independent</label>
-                        <input type="number" class="dependent-years" min="1" max="20" value="8">
-                    </div>
-                `;
-                dependentsContainer.appendChild(dependentDiv);
-            }
-        }
-        
-        // Add property functionality
-        addPropertyBtn.addEventListener('click', function() {
-            const propertyCount = document.querySelectorAll('.asset-item').length;
-            const propertyDiv = document.createElement('div');
-            propertyDiv.className = 'asset-item';
-            propertyDiv.innerHTML = `
-                <div class="asset-header">
-                    <h4>Additional Property ${propertyCount}</h4>
-                    <button class="remove-asset">Remove</button>
-                </div>
-                <div class="form-group">
-                    <label>Estimated Value</label>
-                    <input type="number" class="property-value" min="0" value="0">
-                </div>
-                <div class="form-group">
-                    <label>Remaining Mortgage</label>
-                    <input type="number" class="property-mortgage" min="0" value="0">
-                </div>
-            `;
-            realEstateAssets.appendChild(propertyDiv);
-            
-            // Add event listener to remove button
-            propertyDiv.querySelector('.remove-asset').addEventListener('click', function() {
-                realEstateAssets.removeChild(propertyDiv);
-            });
         });
         
         // Calculate retirement plan
@@ -724,11 +880,10 @@
             const expectancy = parseInt(lifeExpectancy.value);
             const inflationRate = parseFloat(inflation.value) / 100;
             const returnRate = parseFloat(investmentReturn.value) / 100;
-            const savings = parseFloat(currentSavings.value);
-            const contribution = parseFloat(annualContribution.value);
+            const superBalance = parseFloat(currentSuper.value);
+            const contribution = parseFloat(annualContribution.value) + parseFloat(salarySacrifice.value);
             const income = parseFloat(currentIncome.value);
-            const ss = parseFloat(socialSecurity.value);
-            const pensionAmt = parseFloat(pension.value);
+            const pensionAmt = parseFloat(agePension.value);
             const expenses = parseFloat(currentExpenses.value);
             const retirementExpenseRate = parseFloat(retirementExpenses.value) / 100;
             const healthcare = parseFloat(healthcareCosts.value);
@@ -739,143 +894,154 @@
                 partnerData = {
                     age: parseInt(partnerAge.value),
                     retirementAge: parseInt(partnerRetirementAge.value),
+                    keepWorking: partnerKeepWorking.checked,
                     income: parseFloat(partnerIncome.value),
-                    savings: parseFloat(partnerSavings.value),
+                    super: parseFloat(partnerSuper.value),
                     contribution: parseFloat(partnerContribution.value)
                 };
             }
             
-            // Dependents data
-            const dependents = [];
-            const dependentAges = document.querySelectorAll('.dependent-age');
-            const dependentYears = document.querySelectorAll('.dependent-years');
-            
-            for (let i = 0; i < dependentAges.length; i++) {
-                dependents.push({
-                    age: parseInt(dependentAges[i].value),
-                    yearsUntilIndependent: parseInt(dependentYears[i].value)
-                });
-            }
-            
             // Asset data
-            const propertyValues = document.querySelectorAll('.property-value');
-            const propertyMortgages = document.querySelectorAll('.property-mortgage');
-            
-            let realEstateValue = parseFloat(primaryResidenceValue.value);
-            let realEstateMortgage = parseFloat(primaryResidenceMortgage.value);
-            
-            for (let i = 0; i < propertyValues.length; i++) {
-                realEstateValue += parseFloat(propertyValues[i].value);
-                realEstateMortgage += parseFloat(propertyMortgages[i].value);
-            }
-            
             const investmentPropsValue = parseFloat(investmentProperties.value);
-            const vehiclesValue = parseFloat(vehicleValue.value);
+            const residenceValue = parseFloat(primaryResidenceValue.value);
             const otherAssetsValue = parseFloat(otherAssets.value);
             
-            // Calculate total assets and liabilities
-            const totalAssets = savings + 
-                               (partnerData ? partnerData.savings : 0) + 
-                               realEstateValue + 
-                               investmentPropsValue + 
-                               vehiclesValue + 
-                               otherAssetsValue;
-            
-            const totalLiabilities = realEstateMortgage;
-            
-            // Update net worth display
-            netWorthAssets.textContent = formatCurrency(totalAssets);
-            netWorthLiabilities.textContent = formatCurrency(totalLiabilities);
-            netWorthTotal.textContent = formatCurrency(totalAssets - totalLiabilities);
-            
-            // Calculate years until retirement and retirement years
-            const yearsToRetirement = retireAge - age;
-            const retirementYears = expectancy - retireAge;
-            
-            // Calculate retirement expenses (adjusted for inflation)
-            const retirementExpensesAnnual = (expenses * retirementExpenseRate) + healthcare;
-            const futureRetirementExpenses = retirementExpensesAnnual * Math.pow(1 + inflationRate, yearsToRetirement);
-            
-            // Calculate retirement income from sources other than savings
-            const otherIncome = ss + pensionAmt;
-            
-            // Calculate annual shortfall (expenses - other income)
-            const annualShortfall = Math.max(0, futureRetirementExpenses - otherIncome);
-            
-            // Calculate total savings needed (using 4% withdrawal rule)
-            const savingsNeeded = annualShortfall * 25;
-            
-            // Calculate projected savings at retirement
-            let projectedSavings = savings;
-            for (let i = 0; i < yearsToRetirement; i++) {
-                projectedSavings = projectedSavings * (1 + returnRate) + contribution;
-            }
-            
-            // Add partner's savings if applicable
-            if (partnerData) {
-                let partnerProjectedSavings = partnerData.savings;
-                const partnerYearsToRetirement = partnerData.retirementAge - partnerData.age;
-                
-                for (let i = 0; i < partnerYearsToRetirement; i++) {
-                    partnerProjectedSavings = partnerProjectedSavings * (1 + returnRate) + partnerData.contribution;
-                }
-                
-                projectedSavings += partnerProjectedSavings;
-            }
-            
-            // Calculate shortfall/surplus
-            const shortfall = Math.max(0, savingsNeeded - projectedSavings);
-            const surplus = Math.max(0, projectedSavings - savingsNeeded);
-            
-            // Update results display
-            resultRetirementAge.textContent = retireAge;
-            resultRetirementYears.textContent = retirementYears;
-            resultSavingsGoal.textContent = formatCurrency(savingsNeeded);
-            resultProjectedSavings.textContent = formatCurrency(projectedSavings);
+            // Calculate retirement scenarios
+            calculateScenario(55, age, expectancy, inflationRate, returnRate, superBalance, contribution, 
+                            expenses, retirementExpenseRate, healthcare, pensionAmt, partnerData);
+            calculateScenario(60, age, expectancy, inflationRate, returnRate, superBalance, contribution, 
+                            expenses, retirementExpenseRate, healthcare, pensionAmt, partnerData);
+            calculateScenario(65, age, expectancy, inflationRate, returnRate, superBalance, contribution, 
+                            expenses, retirementExpenseRate, healthcare, pensionAmt, partnerData);
+            calculateScenario(70, age, expectancy, inflationRate, returnRate, superBalance, contribution, 
+                            expenses, retirementExpenseRate, healthcare, pensionAmt, partnerData);
             
             // Generate recommendations
-            generateRecommendations(shortfall, surplus, yearsToRetirement, contribution, retireAge, 
-                                  partnerData, dependents, totalAssets, totalLiabilities);
+            generateRecommendations(age, retireAge, superBalance, contribution, partnerData);
             
             // Generate chart
-            generateChart(yearsToRetirement, retirementYears, savings, contribution, returnRate, 
-                         futureRetirementExpenses, otherIncome, savingsNeeded, projectedSavings, partnerData);
+            generateChart(age, expectancy, returnRate, superBalance, contribution, partnerData);
             
             // Show results
             resultsPlaceholder.classList.add('hidden');
             resultsContent.classList.remove('hidden');
         }
         
-        function generateRecommendations(shortfall, surplus, yearsToRetirement, contribution, retireAge, 
-                                       partnerData, dependents, totalAssets, totalLiabilities) {
-            recommendationsList.innerHTML = '';
+        function calculateScenario(scenarioAge, currentAge, lifeExpectancy, inflationRate, returnRate, 
+                                 superBalance, contribution, expenses, retirementExpenseRate, healthcare, 
+                                 pensionAmt, partnerData) {
+            const yearsToRetirement = scenarioAge - currentAge;
+            const retirementYears = lifeExpectancy - scenarioAge;
+            
+            // Calculate future super balance
+            let projectedSuper = superBalance;
+            for (let i = 0; i < yearsToRetirement; i++) {
+                projectedSuper = projectedSuper * (1 + returnRate) + contribution;
+            }
+            
+            // Add partner's super if applicable and if partner retires at same time or earlier
+            if (partnerData && partnerData.retirementAge <= scenarioAge) {
+                let partnerProjectedSuper = partnerData.super;
+                const partnerYearsToRetirement = scenarioAge - partnerData.age;
+                
+                for (let i = 0; i < partnerYearsToRetirement; i++) {
+                    partnerProjectedSuper = partnerProjectedSuper * (1 + returnRate) + partnerData.contribution;
+                }
+                
+                projectedSuper += partnerProjectedSuper;
+            }
+            
+            // Calculate retirement expenses (adjusted for inflation)
+            const retirementExpensesAnnual = (expenses * retirementExpenseRate) + healthcare;
+            const futureRetirementExpenses = retirementExpensesAnnual * Math.pow(1 + inflationRate, yearsToRetirement);
+            
+            // Calculate retirement income (4% withdrawal rule + Age Pension)
+            const withdrawalRate = 0.04;
+            const superIncome = projectedSuper * withdrawalRate;
+            const totalRetirementIncome = superIncome + pensionAmt;
+            
+            // Calculate shortfall/surplus
+            const shortfall = Math.max(0, futureRetirementExpenses - totalRetirementIncome);
+            const surplus = Math.max(0, totalRetirementIncome - futureRetirementExpenses);
+            
+            // Update scenario display
+            const yearsElement = document.getElementById(`scenario-${scenarioAge}-years`);
+            const superElement = document.getElementById(`scenario-${scenarioAge}-super`);
+            const incomeElement = document.getElementById(`scenario-${scenarioAge}-income`);
+            
+            if (yearsElement) yearsElement.textContent = yearsToRetirement;
+            if (superElement) superElement.textContent = formatCurrency(projectedSuper);
+            if (incomeElement) incomeElement.textContent = formatCurrency(totalRetirementIncome);
             
             if (shortfall > 0) {
-                // There's a shortfall - provide recommendations to address it
-                const additionalAnnual = shortfall / yearsToRetirement;
+                const shortfallElement = document.getElementById(`scenario-${scenarioAge}-shortfall`);
+                if (shortfallElement) shortfallElement.textContent = formatCurrency(shortfall);
                 
+                // Hide surplus element if it exists
+                const surplusElement = document.getElementById(`scenario-${scenarioAge}-surplus`);
+                if (surplusElement) surplusElement.style.display = 'none';
+            } else {
+                const surplusElement = document.getElementById(`scenario-${scenarioAge}-surplus`);
+                if (surplusElement) {
+                    surplusElement.textContent = formatCurrency(surplus);
+                    surplusElement.style.display = 'block';
+                }
+                
+                // Hide shortfall element if it exists
+                const shortfallElement = document.getElementById(`scenario-${scenarioAge}-shortfall`);
+                if (shortfallElement) shortfallElement.style.display = 'none';
+            }
+            
+            return {
+                age: scenarioAge,
+                yearsToRetirement,
+                projectedSuper,
+                retirementIncome: totalRetirementIncome,
+                shortfall,
+                surplus
+            };
+        }
+        
+        function generateRecommendations(currentAge, retirementAge, superBalance, contribution, partnerData) {
+            recommendationsList.innerHTML = '';
+            
+            // Super balance recommendations
+            const averageSuper = {
+                45: 150000,
+                50: 215000,
+                55: 330000,
+                60: 430000,
+                65: 510000
+            };
+            
+            let ageBracket = Math.floor(currentAge / 5) * 5;
+            if (ageBracket < 45) ageBracket = 45;
+            if (ageBracket > 65) ageBracket = 65;
+            
+            const avgSuperForAge = averageSuper[ageBracket];
+            
+            if (superBalance < avgSuperForAge * 0.7) {
                 recommendationsList.innerHTML += `
                     <div class="recommendation warning">
-                        <h4>Retirement Savings Shortfall</h4>
-                        <p>Based on your current plan, you may have a retirement savings shortfall of ${formatCurrency(shortfall)}. Consider these options:</p>
+                        <h4>Super Balance Below Average</h4>
+                        <p>Your super balance is below the average for your age group. Consider:</p>
                         <ul>
-                            <li>Increase your annual contributions by approximately ${formatCurrency(additionalAnnual)}</li>
-                            <li>Consider working ${Math.ceil(yearsToRetirement * 0.1)} more years to increase savings and reduce retirement duration</li>
-                            <li>Review your investment strategy to potentially increase returns (while considering risk)</li>
-                            <li>Reduce expected retirement expenses by ${formatCurrency(shortfall / 25 / 12)} per month</li>
+                            <li>Making additional salary sacrifice contributions</li>
+                            <li>Reviewing your investment strategy within super</li>
+                            <li>Consolidating multiple super accounts to reduce fees</li>
+                            <li>Seeking financial advice to optimize your super strategy</li>
                         </ul>
                     </div>
                 `;
-            } else {
-                // There's a surplus - provide positive reinforcement
+            } else if (superBalance > avgSuperForAge * 1.3) {
                 recommendationsList.innerHTML += `
                     <div class="recommendation success">
-                        <h4>On Track for Retirement</h4>
-                        <p>Great news! Your current plan projects a retirement surplus of ${formatCurrency(surplus)}. Consider these options:</p>
+                        <h4>Strong Super Position</h4>
+                        <p>Your super balance is above average for your age. Consider:</p>
                         <ul>
-                            <li>You could potentially retire ${Math.floor(surplus / (contribution * 1.5))} years earlier than planned</li>
-                            <li>You could increase your retirement lifestyle by ${formatCurrency(surplus / 25)} annually</li>
-                            <li>Consider allocating some funds for legacy planning or charitable giving</li>
+                            <li>Diversifying investments as you approach retirement</li>
+                            <li>Exploring transition to retirement strategies as you near preservation age</li>
+                            <li>Planning for potential Age Pension impacts due to your assets</li>
                         </ul>
                     </div>
                 `;
@@ -883,81 +1049,54 @@
             
             // Partner-specific recommendations
             if (partnerData) {
-                const partnerYearsToRetirement = partnerData.retirementAge - partnerData.age;
-                
-                if (partnerYearsToRetirement !== yearsToRetirement) {
+                if (partnerData.keepWorking) {
                     recommendationsList.innerHTML += `
                         <div class="recommendation">
-                            <h4>Staggered Retirement Planning</h4>
-                            <p>Since you and your partner plan to retire at different ages, consider:</p>
+                            <h4>Partner Continuing Work</h4>
+                            <p>With your partner continuing to work after you retire:</p>
                             <ul>
-                                <li>Coordinating healthcare coverage between retirement dates</li>
-                                <li>Planning for potential income changes during the staggered retirement period</li>
-                                <li>Adjusting your budget during the transition period</li>
+                                <li>Your household income will be partially maintained during the transition</li>
+                                <li>Your partner's super will continue growing with contributions</li>
+                                <li>Consider adjusting your retirement budget during this transition period</li>
                             </ul>
                         </div>
                     `;
                 }
-            }
-            
-            // Dependents recommendations
-            if (dependents.length > 0) {
-                let maxDependentYears = 0;
-                dependents.forEach(dep => {
-                    if (dep.yearsUntilIndependent > maxDependentYears) {
-                        maxDependentYears = dep.yearsUntilIndependent;
-                    }
-                });
                 
-                recommendationsList.innerHTML += `
-                    <div class="recommendation">
-                        <h4>Dependent Planning</h4>
-                        <p>With ${dependents.length} dependent(s), consider these financial planning aspects:</p>
-                        <ul>
-                            <li>Education funding needs for the next ${maxDependentYears} years</li>
-                            <li>Potential changes to expenses as dependents become independent</li>
-                            <li>Estate planning to provide for dependents if needed</li>
-                        </ul>
-                    </div>
-                `;
-            }
-            
-            // Real estate recommendations
-            if (totalLiabilities > 0) {
-                const loanToValue = (totalLiabilities / totalAssets) * 100;
-                
-                if (loanToValue > 60) {
+                // Age difference considerations
+                const ageDifference = partnerData.age - currentAge;
+                if (Math.abs(ageDifference) >= 5) {
                     recommendationsList.innerHTML += `
-                        <div class="recommendation warning">
-                            <h4>High Debt Level</h4>
-                            <p>Your current loan-to-value ratio is ${loanToValue.toFixed(1)}%, which is relatively high. Consider:</p>
+                        <div class="recommendation">
+                            <h4>Age Difference Planning</h4>
+                            <p>With a significant age difference between you and your partner:</p>
                             <ul>
-                                <li>Accelerating mortgage payments to reduce debt before retirement</li>
-                                <li>Refinancing to a lower interest rate if available</li>
-                                <li>Evaluating whether downsizing in retirement could reduce housing costs</li>
+                                <li>Consider the impact on Age Pension eligibility timing</li>
+                                <li>Plan for potential healthcare needs at different life stages</li>
+                                <li>Review your estate planning and super beneficiary nominations</li>
                             </ul>
                         </div>
                     `;
                 }
             }
             
-            // General recommendations
+            // General Australian retirement recommendations
             recommendationsList.innerHTML += `
                 <div class="recommendation">
-                    <h4>General Retirement Planning Tips</h4>
+                    <h4>Australian Retirement Strategy</h4>
+                    <p>Key considerations for Australian retirement planning:</p>
                     <ul>
-                        <li>Review and update your retirement plan annually or when major life changes occur</li>
-                        <li>Consider healthcare costs, which often increase faster than general inflation</li>
-                        <li>Diversify your investments to manage risk appropriately for your age</li>
-                        <li>Plan for required minimum distributions (RMDs) from tax-advantaged accounts</li>
-                        <li>Consider long-term care insurance as part of your overall retirement plan</li>
+                        <li>Super preservation age is between 55-60 depending on your birth date</li>
+                        <li>Age Pension eligibility begins at 67 (increasing to 67.5 by 2023)</li>
+                        <li>Consider the impact of asset and income tests on Age Pension eligibility</li>
+                        <li>Explore the First Home Super Saver Scheme if considering downsizing</li>
+                        <li>Review your super investment strategy as you approach retirement</li>
                     </ul>
                 </div>
             `;
         }
         
-        function generateChart(yearsToRetirement, retirementYears, savings, contribution, returnRate, 
-                              futureRetirementExpenses, otherIncome, savingsNeeded, projectedSavings, partnerData) {
+        function generateChart(currentAge, lifeExpectancy, returnRate, superBalance, contribution, partnerData) {
             const ctx = document.getElementById('retirement-chart').getContext('2d');
             
             // Destroy existing chart if it exists
@@ -965,63 +1104,64 @@
                 retirementChart.destroy();
             }
             
-            // Prepare data for accumulation phase
-            const accumulationLabels = [];
-            const accumulationData = [];
-            let currentSavingsValue = savings;
+            // Prepare data for different retirement ages
+            const labels = ['Age 55', 'Age 60', 'Age 65', 'Age 70'];
+            const superData = [];
+            const incomeData = [];
+            const expenseData = [];
             
-            // Add partner's savings if applicable
-            if (partnerData) {
-                currentSavingsValue += partnerData.savings;
-            }
-            
-            for (let i = 0; i <= yearsToRetirement; i++) {
-                accumulationLabels.push(`Year ${i}`);
-                accumulationData.push(currentSavingsValue);
-                if (i < yearsToRetirement) {
-                    currentSavingsValue = currentSavingsValue * (1 + returnRate) + contribution;
-                    // Add partner's contribution if applicable
-                    if (partnerData && i < (partnerData.retirementAge - partnerData.age)) {
-                        currentSavingsValue += partnerData.contribution;
+            // Calculate values for each retirement age
+            for (let i = 0; i < labels.length; i++) {
+                const scenarioAge = 55 + i * 5;
+                const yearsToRetirement = scenarioAge - currentAge;
+                
+                // Calculate super at retirement
+                let projectedSuper = superBalance;
+                for (let j = 0; j < yearsToRetirement; j++) {
+                    projectedSuper = projectedSuper * (1 + returnRate) + contribution;
+                }
+                
+                // Add partner's super if applicable
+                if (partnerData && partnerData.retirementAge <= scenarioAge) {
+                    let partnerProjectedSuper = partnerData.super;
+                    const partnerYearsToRetirement = scenarioAge - partnerData.age;
+                    
+                    for (let j = 0; j < partnerYearsToRetirement; j++) {
+                        partnerProjectedSuper = partnerProjectedSuper * (1 + returnRate) + partnerData.contribution;
                     }
+                    
+                    projectedSuper += partnerProjectedSuper;
                 }
-            }
-            
-            // Prepare data for distribution phase
-            const distributionLabels = [];
-            const distributionData = [];
-            let retirementSavings = projectedSavings;
-            const annualWithdrawal = (futureRetirementExpenses - otherIncome);
-            
-            for (let i = 0; i <= retirementYears; i++) {
-                distributionLabels.push(`Retirement Year ${i}`);
-                distributionData.push(retirementSavings);
-                if (i < retirementYears) {
-                    retirementSavings = retirementSavings - annualWithdrawal;
-                    retirementSavings = retirementSavings * (1 + returnRate); // Continue growing at a conservative rate
-                }
+                
+                superData.push(projectedSuper);
+                
+                // Calculate retirement income (4% rule)
+                const retirementIncome = projectedSuper * 0.04;
+                incomeData.push(retirementIncome);
+                
+                // Use placeholder for expenses (would need actual expense calculation)
+                expenseData.push(retirementIncome * 0.85); // Assuming expenses are 85% of income for visualization
             }
             
             // Create chart
             retirementChart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: [...accumulationLabels, ...distributionLabels.slice(1)],
+                    labels: labels,
                     datasets: [
                         {
-                            label: 'Projected Retirement Savings',
-                            data: [...accumulationData, ...distributionData.slice(1)],
-                            borderColor: '#3498db',
-                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                            fill: true,
-                            tension: 0.1
+                            label: 'Projected Super Balance',
+                            data: superData,
+                            backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            borderWidth: 1
                         },
                         {
-                            label: 'Retirement Savings Goal',
-                            data: Array(accumulationLabels.length + distributionLabels.length - 1).fill(savingsNeeded),
-                            borderColor: '#2ecc71',
-                            borderDash: [5, 5],
-                            fill: false
+                            label: 'Annual Retirement Income',
+                            data: incomeData,
+                            backgroundColor: 'rgba(46, 204, 113, 0.7)',
+                            borderColor: 'rgba(46, 204, 113, 1)',
+                            borderWidth: 1
                         }
                     ]
                 },
@@ -1031,7 +1171,7 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Retirement Savings Projection'
+                            text: 'Retirement Projections by Age'
                         },
                         tooltip: {
                             callbacks: {
@@ -1057,9 +1197,9 @@
         
         // Utility function to format currency
         function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', {
+            return new Intl.NumberFormat('en-AU', {
                 style: 'currency',
-                currency: 'USD',
+                currency: 'AUD',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).format(amount);
@@ -1069,66 +1209,33 @@
         saveBtn.addEventListener('click', saveData);
         
         function saveData() {
-            // Collect all dependent data
-            const dependentAges = document.querySelectorAll('.dependent-age');
-            const dependentYears = document.querySelectorAll('.dependent-years');
-            const dependentsData = [];
-            
-            for (let i = 0; i < dependentAges.length; i++) {
-                dependentsData.push({
-                    age: dependentAges[i].value,
-                    yearsUntilIndependent: dependentYears[i].value
-                });
-            }
-            
-            // Collect property data
-            const propertyValues = document.querySelectorAll('.property-value');
-            const propertyMortgages = document.querySelectorAll('.property-mortgage');
-            const propertiesData = [];
-            
-            // Add primary residence
-            propertiesData.push({
-                value: primaryResidenceValue.value,
-                mortgage: primaryResidenceMortgage.value
-            });
-            
-            // Add additional properties
-            for (let i = 0; i < propertyValues.length; i++) {
-                propertiesData.push({
-                    value: propertyValues[i].value,
-                    mortgage: propertyMortgages[i].value
-                });
-            }
-            
             const data = {
                 currentAge: currentAge.value,
                 retirementAge: retirementAge.value,
                 lifeExpectancy: lifeExpectancy.value,
                 inflation: inflation.value,
                 investmentReturn: investmentReturn.value,
-                currentSavings: currentSavings.value,
+                currentSuper: currentSuper.value,
                 annualContribution: annualContribution.value,
+                salarySacrifice: salarySacrifice.value,
                 currentIncome: currentIncome.value,
-                socialSecurity: socialSecurity.value,
-                pension: pension.value,
+                agePension: agePension.value,
                 currentExpenses: currentExpenses.value,
                 retirementExpenses: retirementExpenses.value,
                 healthcareCosts: healthcareCosts.value,
                 hasPartner: hasPartnerCheckbox.checked,
                 partnerAge: partnerAge.value,
                 partnerRetirementAge: partnerRetirementAge.value,
+                partnerKeepWorking: partnerKeepWorking.checked,
                 partnerIncome: partnerIncome.value,
-                partnerSavings: partnerSavings.value,
+                partnerSuper: partnerSuper.value,
                 partnerContribution: partnerContribution.value,
-                dependentCount: dependentCount.value,
-                dependents: dependentsData,
-                properties: propertiesData,
                 investmentProperties: investmentProperties.value,
-                vehicleValue: vehicleValue.value,
+                primaryResidenceValue: primaryResidenceValue.value,
                 otherAssets: otherAssets.value
             };
             
-            localStorage.setItem('retirementPlannerData', JSON.stringify(data));
+            localStorage.setItem('australianRetirementPlannerData', JSON.stringify(data));
             alert('Your retirement data has been saved locally!');
         }
         
@@ -1136,7 +1243,7 @@
         loadBtn.addEventListener('click', loadData);
         
         function loadData() {
-            const savedData = localStorage.getItem('retirementPlannerData');
+            const savedData = localStorage.getItem('australianRetirementPlannerData');
             
             if (savedData) {
                 const data = JSON.parse(savedData);
@@ -1147,11 +1254,11 @@
                 lifeExpectancy.value = data.lifeExpectancy;
                 inflation.value = data.inflation;
                 investmentReturn.value = data.investmentReturn;
-                currentSavings.value = data.currentSavings;
+                currentSuper.value = data.currentSuper;
                 annualContribution.value = data.annualContribution;
+                salarySacrifice.value = data.salarySacrifice || 0;
                 currentIncome.value = data.currentIncome;
-                socialSecurity.value = data.socialSecurity;
-                pension.value = data.pension;
+                agePension.value = data.agePension;
                 currentExpenses.value = data.currentExpenses;
                 retirementExpenses.value = data.retirementExpenses;
                 healthcareCosts.value = data.healthcareCosts;
@@ -1162,75 +1269,27 @@
                     partnerDetails.classList.remove('hidden');
                     partnerAge.value = data.partnerAge;
                     partnerRetirementAge.value = data.partnerRetirementAge;
+                    partnerKeepWorking.checked = data.partnerKeepWorking;
                     partnerIncome.value = data.partnerIncome;
-                    partnerSavings.value = data.partnerSavings;
+                    partnerSuper.value = data.partnerSuper;
                     partnerContribution.value = data.partnerContribution;
                 }
                 
-                // Load dependents data
-                dependentCount.value = data.dependentCount;
-                updateDependents();
-                
-                // Wait for DOM to update then set dependent values
-                setTimeout(() => {
-                    const dependentAges = document.querySelectorAll('.dependent-age');
-                    const dependentYears = document.querySelectorAll('.dependent-years');
-                    
-                    for (let i = 0; i < data.dependents.length; i++) {
-                        if (dependentAges[i]) dependentAges[i].value = data.dependents[i].age;
-                        if (dependentYears[i]) dependentYears[i].value = data.dependents[i].yearsUntilIndependent;
-                    }
-                }, 100);
-                
-                // Load property data
-                if (data.properties && data.properties.length > 0) {
-                    // Clear existing additional properties
-                    const additionalProperties = document.querySelectorAll('.asset-item:not(:first-child)');
-                    additionalProperties.forEach(prop => prop.remove());
-                    
-                    // Set primary residence
-                    primaryResidenceValue.value = data.properties[0].value;
-                    primaryResidenceMortgage.value = data.properties[0].mortgage;
-                    
-                    // Add additional properties
-                    for (let i = 1; i < data.properties.length; i++) {
-                        const propertyDiv = document.createElement('div');
-                        propertyDiv.className = 'asset-item';
-                        propertyDiv.innerHTML = `
-                            <div class="asset-header">
-                                <h4>Additional Property ${i}</h4>
-                                <button class="remove-asset">Remove</button>
-                            </div>
-                            <div class="form-group">
-                                <label>Estimated Value</label>
-                                <input type="number" class="property-value" min="0" value="${data.properties[i].value}">
-                            </div>
-                            <div class="form-group">
-                                <label>Remaining Mortgage</label>
-                                <input type="number" class="property-mortgage" min="0" value="${data.properties[i].mortgage}">
-                            </div>
-                        `;
-                        realEstateAssets.appendChild(propertyDiv);
-                        
-                        // Add event listener to remove button
-                        propertyDiv.querySelector('.remove-asset').addEventListener('click', function() {
-                            realEstateAssets.removeChild(propertyDiv);
-                        });
-                    }
-                }
-                
-                // Load other asset data
+                // Load asset data
                 investmentProperties.value = data.investmentProperties || 0;
-                vehicleValue.value = data.vehicleValue || 0;
+                primaryResidenceValue.value = data.primaryResidenceValue || 0;
                 otherAssets.value = data.otherAssets || 0;
                 
                 alert('Your saved retirement data has been loaded!');
+                
+                // Recalculate with loaded data
+                calculateRetirement();
             } else {
                 alert('No saved data found. Please save your data first.');
             }
         }
         
-        // Export as PDF (simplified version - in a real app, you'd use a library like jsPDF)
+        // Export as PDF (simplified version)
         exportPdfBtn.addEventListener('click', () => {
             alert('In a full implementation, this would generate a PDF report. For now, use the print function.');
         });
@@ -1242,7 +1301,6 @@
         
         // Initialize with sample calculation
         window.addEventListener('DOMContentLoaded', () => {
-            updateDependents();
             calculateRetirement();
         });
     </script>
