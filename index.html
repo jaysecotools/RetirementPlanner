@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirement Financial Planner</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .results-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .result-card {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--dark);
+            opacity: 0.8;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin: 25px 0;
+        }
+        
+        .recommendations {
+            margin-top: 30px;
+        }
+        
+        .recommendation {
+            background: var(--light);
+            padding: 15px;
+            border-left: 4px solid var(--secondary);
+            margin-bottom: 15px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .recommendation.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .recommendation.success {
+            border-left-color: var(--success);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--secondary);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--dark);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Retirement Financial Planner</h1>
+            <p class="subtitle">Plan your retirement with confidence using this comprehensive tool</p>
+        </header>
+        
+        <div class="app-container">
+            <div class="input-section">
+                <h2 class="section-title">Your Financial Information</h2>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="basic">Basic Info</div>
+                    <div class="tab" data-tab="assets">Assets & Income</div>
+                    <div class="tab" data-tab="expenses">Expenses</div>
+                </div>
+                
+                <div class="tab-content active" id="basic-tab">
+                    <div class="form-group">
+                        <label for="current-age">Current Age</label>
+                        <input type="number" id="current-age" min="18" max="100" value="40">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="retirement-age">Desired Retirement Age</label>
+                        <input type="number" id="retirement-age" min="40" max="100" value="65">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="life-expectancy">Life Expectancy</label>
+                        <input type="number" id="life-expectancy" min="65" max="120" value="90">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inflation">Expected Annual Inflation (%)</label>
+                        <input type="number" id="inflation" min="0" max="10" step="0.1" value="2.5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="investment-return">Expected Annual Investment Return (%)</label>
+                        <input type="number" id="investment-return" min="0" max="20" step="0.1" value="7">
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="assets-tab">
+                    <div class="form-group">
+                        <label for="current-savings">Current Retirement Savings</label>
+                        <input type="number" id="current-savings" min="0" value="100000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="annual-contribution">Annual Retirement Contribution</label>
+                        <input type="number" id="annual-contribution" min="0" value="10000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="current-income">Current Annual Income</label>
+                        <input type="number" id="current-income" min="0" value="75000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="social-security">Expected Social Security (Annual)</label>
+                        <input type="number" id="social-security" min="0" value="20000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pension">Expected Pension (Annual)</label>
+                        <input type="number" id="pension" min="0" value="0">
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="expenses-tab">
+                    <div class="form-group">
+                        <label for="current-expenses">Current Annual Expenses</label>
+                        <input type="number" id="current-expenses" min="0" value="50000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="retirement-expenses">Expected Retirement Expenses (% of Current)</label>
+                        <input type="number" id="retirement-expenses" min="50" max="150" value="80">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="healthcare-costs">Expected Annual Healthcare Costs in Retirement</label>
+                        <input type="number" id="healthcare-costs" min="0" value="5000">
+                    </div>
+                </div>
+                
+                <button id="calculate-btn" class="btn btn-block">Calculate Retirement Plan</button>
+                <button id="save-btn" class="btn btn-success btn-block">Save Data Locally</button>
+                <button id="load-btn" class="btn btn-warning btn-block">Load Saved Data</button>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title">Your Retirement Plan</h2>
+                
+                <div id="results-placeholder">
+                    <p>Enter your financial information and click "Calculate Retirement Plan" to see your personalized retirement strategy.</p>
+                </div>
+                
+                <div id="results-content" class="hidden">
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-label">Retirement Age</div>
+                            <div class="result-value" id="result-retirement-age">65</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-label">Years in Retirement</div>
+                            <div class="result-value" id="result-retirement-years">25</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-label">Retirement Savings Goal</div>
+                            <div class="result-value" id="result-savings-goal">$1,250,000</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <div class="result-label">Projected Savings at Retirement</div>
+                            <div class="result-value" id="result-projected-savings">$985,000</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="retirement-chart"></canvas>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3 class="section-title">Recommendations</h3>
+                        <div id="recommendations-list">
+                            <!-- Recommendations will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="export-pdf" class="btn">Export as PDF</button>
+                        <button id="print-plan" class="btn">Print Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>This retirement planner is for informational purposes only. Consult with a qualified financial advisor for personalized advice.</p>
+            <p>All data is stored locally on your device and is not transmitted to any server.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // DOM Elements
+        const calculateBtn = document.getElementById('calculate-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const loadBtn = document.getElementById('load-btn');
+        const exportPdfBtn = document.getElementById('export-pdf');
+        const printPlanBtn = document.getElementById('print-plan');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const resultsPlaceholder = document.getElementById('results-placeholder');
+        const resultsContent = document.getElementById('results-content');
+        
+        // Input fields
+        const currentAge = document.getElementById('current-age');
+        const retirementAge = document.getElementById('retirement-age');
+        const lifeExpectancy = document.getElementById('life-expectancy');
+        const inflation = document.getElementById('inflation');
+        const investmentReturn = document.getElementById('investment-return');
+        const currentSavings = document.getElementById('current-savings');
+        const annualContribution = document.getElementById('annual-contribution');
+        const currentIncome = document.getElementById('current-income');
+        const socialSecurity = document.getElementById('social-security');
+        const pension = document.getElementById('pension');
+        const currentExpenses = document.getElementById('current-expenses');
+        const retirementExpenses = document.getElementById('retirement-expenses');
+        const healthcareCosts = document.getElementById('healthcare-costs');
+        
+        // Result fields
+        const resultRetirementAge = document.getElementById('result-retirement-age');
+        const resultRetirementYears = document.getElementById('result-retirement-years');
+        const resultSavingsGoal = document.getElementById('result-savings-goal');
+        const resultProjectedSavings = document.getElementById('result-projected-savings');
+        const recommendationsList = document.getElementById('recommendations-list');
+        
+        // Chart variable
+        let retirementChart;
+        
+        // Tab functionality
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show active tab content
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${tabId}-tab`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Calculate retirement plan
+        calculateBtn.addEventListener('click', calculateRetirement);
+        
+        function calculateRetirement() {
+            // Get input values
+            const age = parseInt(currentAge.value);
+            const retireAge = parseInt(retirementAge.value);
+            const expectancy = parseInt(lifeExpectancy.value);
+            const inflationRate = parseFloat(inflation.value) / 100;
+            const returnRate = parseFloat(investmentReturn.value) / 100;
+            const savings = parseFloat(currentSavings.value);
+            const contribution = parseFloat(annualContribution.value);
+            const income = parseFloat(currentIncome.value);
+            const ss = parseFloat(socialSecurity.value);
+            const pensionAmt = parseFloat(pension.value);
+            const expenses = parseFloat(currentExpenses.value);
+            const retirementExpenseRate = parseFloat(retirementExpenses.value) / 100;
+            const healthcare = parseFloat(healthcareCosts.value);
+            
+            // Calculate years until retirement and retirement years
+            const yearsToRetirement = retireAge - age;
+            const retirementYears = expectancy - retireAge;
+            
+            // Calculate retirement expenses (adjusted for inflation)
+            const retirementExpensesAnnual = (expenses * retirementExpenseRate) + healthcare;
+            const futureRetirementExpenses = retirementExpensesAnnual * Math.pow(1 + inflationRate, yearsToRetirement);
+            
+            // Calculate retirement income from sources other than savings
+            const otherIncome = ss + pensionAmt;
+            
+            // Calculate annual shortfall (expenses - other income)
+            const annualShortfall = Math.max(0, futureRetirementExpenses - otherIncome);
+            
+            // Calculate total savings needed (using 4% withdrawal rule)
+            const savingsNeeded = annualShortfall * 25;
+            
+            // Calculate projected savings at retirement
+            let projectedSavings = savings;
+            for (let i = 0; i < yearsToRetirement; i++) {
+                projectedSavings = projectedSavings * (1 + returnRate) + contribution;
+            }
+            
+            // Calculate shortfall/surplus
+            const shortfall = Math.max(0, savingsNeeded - projectedSavings);
+            const surplus = Math.max(0, projectedSavings - savingsNeeded);
+            
+            // Update results display
+            resultRetirementAge.textContent = retireAge;
+            resultRetirementYears.textContent = retirementYears;
+            resultSavingsGoal.textContent = formatCurrency(savingsNeeded);
+            resultProjectedSavings.textContent = formatCurrency(projectedSavings);
+            
+            // Generate recommendations
+            generateRecommendations(shortfall, surplus, yearsToRetirement, contribution, retireAge);
+            
+            // Generate chart
+            generateChart(yearsToRetirement, retirementYears, savings, contribution, returnRate, 
+                         futureRetirementExpenses, otherIncome, savingsNeeded, projectedSavings);
+            
+            // Show results
+            resultsPlaceholder.classList.add('hidden');
+            resultsContent.classList.remove('hidden');
+        }
+        
+        function generateRecommendations(shortfall, surplus, yearsToRetirement, contribution, retireAge) {
+            recommendationsList.innerHTML = '';
+            
+            if (shortfall > 0) {
+                // There's a shortfall - provide recommendations to address it
+                const additionalAnnual = shortfall / yearsToRetirement;
+                
+                recommendationsList.innerHTML += `
+                    <div class="recommendation warning">
+                        <h4>Retirement Savings Shortfall</h4>
+                        <p>Based on your current plan, you may have a retirement savings shortfall of ${formatCurrency(shortfall)}. Consider these options:</p>
+                        <ul>
+                            <li>Increase your annual contributions by approximately ${formatCurrency(additionalAnnual)}</li>
+                            <li>Consider working ${Math.ceil(yearsToRetirement * 0.1)} more years to increase savings and reduce retirement duration</li>
+                            <li>Review your investment strategy to potentially increase returns (while considering risk)</li>
+                            <li>Reduce expected retirement expenses by ${formatCurrency(shortfall / 25 / 12)} per month</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                // There's a surplus - provide positive reinforcement
+                recommendationsList.innerHTML += `
+                    <div class="recommendation success">
+                        <h4>On Track for Retirement</h4>
+                        <p>Great news! Your current plan projects a retirement surplus of ${formatCurrency(surplus)}. Consider these options:</p>
+                        <ul>
+                            <li>You could potentially retire ${Math.floor(surplus / (contribution * 1.5))} years earlier than planned</li>
+                            <li>You could increase your retirement lifestyle by ${formatCurrency(surplus / 25)} annually</li>
+                            <li>Consider allocating some funds for legacy planning or charitable giving</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // General recommendations
+            recommendationsList.innerHTML += `
+                <div class="recommendation">
+                    <h4>General Retirement Planning Tips</h4>
+                    <ul>
+                        <li>Review and update your retirement plan annually or when major life changes occur</li>
+                        <li>Consider healthcare costs, which often increase faster than general inflation</li>
+                        <li>Diversify your investments to manage risk appropriately for your age</li>
+                        <li>Plan for required minimum distributions (RMDs) from tax-advantaged accounts</li>
+                        <li>Consider long-term care insurance as part of your overall retirement plan</li>
+                    </ul>
+                </div>
+            `;
+        }
+        
+        function generateChart(yearsToRetirement, retirementYears, savings, contribution, returnRate, 
+                              futureRetirementExpenses, otherIncome, savingsNeeded, projectedSavings) {
+            const ctx = document.getElementById('retirement-chart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (retirementChart) {
+                retirementChart.destroy();
+            }
+            
+            // Prepare data for accumulation phase
+            const accumulationLabels = [];
+            const accumulationData = [];
+            let currentSavingsValue = savings;
+            
+            for (let i = 0; i <= yearsToRetirement; i++) {
+                accumulationLabels.push(`Year ${i}`);
+                accumulationData.push(currentSavingsValue);
+                if (i < yearsToRetirement) {
+                    currentSavingsValue = currentSavingsValue * (1 + returnRate) + contribution;
+                }
+            }
+            
+            // Prepare data for distribution phase
+            const distributionLabels = [];
+            const distributionData = [];
+            let retirementSavings = projectedSavings;
+            const annualWithdrawal = (futureRetirementExpenses - otherIncome);
+            
+            for (let i = 0; i <= retirementYears; i++) {
+                distributionLabels.push(`Retirement Year ${i}`);
+                distributionData.push(retirementSavings);
+                if (i < retirementYears) {
+                    retirementSavings = retirementSavings - annualWithdrawal;
+                    retirementSavings = retirementSavings * (1 + returnRate); // Continue growing at a conservative rate
+                }
+            }
+            
+            // Create chart
+            retirementChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [...accumulationLabels, ...distributionLabels.slice(1)],
+                    datasets: [
+                        {
+                            label: 'Projected Retirement Savings',
+                            data: [...accumulationData, ...distributionData.slice(1)],
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            fill: true,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Retirement Savings Goal',
+                            data: Array(accumulationLabels.length + distributionLabels.length - 1).fill(savingsNeeded),
+                            borderColor: '#2ecc71',
+                            borderDash: [5, 5],
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Retirement Savings Projection'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${formatCurrency(context.raw)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Utility function to format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+        
+        // Save data to local storage
+        saveBtn.addEventListener('click', saveData);
+        
+        function saveData() {
+            const data = {
+                currentAge: currentAge.value,
+                retirementAge: retirementAge.value,
+                lifeExpectancy: lifeExpectancy.value,
+                inflation: inflation.value,
+                investmentReturn: investmentReturn.value,
+                currentSavings: currentSavings.value,
+                annualContribution: annualContribution.value,
+                currentIncome: currentIncome.value,
+                socialSecurity: socialSecurity.value,
+                pension: pension.value,
+                currentExpenses: currentExpenses.value,
+                retirementExpenses: retirementExpenses.value,
+                healthcareCosts: healthcareCosts.value
+            };
+            
+            localStorage.setItem('retirementPlannerData', JSON.stringify(data));
+            alert('Your retirement data has been saved locally!');
+        }
+        
+        // Load data from local storage
+        loadBtn.addEventListener('click', loadData);
+        
+        function loadData() {
+            const savedData = localStorage.getItem('retirementPlannerData');
+            
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                currentAge.value = data.currentAge;
+                retirementAge.value = data.retirementAge;
+                lifeExpectancy.value = data.lifeExpectancy;
+                inflation.value = data.inflation;
+                investmentReturn.value = data.investmentReturn;
+                currentSavings.value = data.currentSavings;
+                annualContribution.value = data.annualContribution;
+                currentIncome.value = data.currentIncome;
+                socialSecurity.value = data.socialSecurity;
+                pension.value = data.pension;
+                currentExpenses.value = data.currentExpenses;
+                retirementExpenses.value = data.retirementExpenses;
+                healthcareCosts.value = data.healthcareCosts;
+                
+                alert('Your saved retirement data has been loaded!');
+            } else {
+                alert('No saved data found. Please save your data first.');
+            }
+        }
+        
+        // Export as PDF (simplified version - in a real app, you'd use a library like jsPDF)
+        exportPdfBtn.addEventListener('click', () => {
+            alert('In a full implementation, this would generate a PDF report. For now, use the print function.');
+        });
+        
+        // Print plan
+        printPlanBtn.addEventListener('click', () => {
+            window.print();
+        });
+        
+        // Initialize with sample calculation
+        window.addEventListener('DOMContentLoaded', () => {
+            calculateRetirement();
+        });
+    </script>
+</body>
+</html>
